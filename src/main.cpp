@@ -9,6 +9,7 @@
 #include "Window.hpp"
 #include "Buffers/VertexBuffer.hpp"
 #include "Buffers/VertexArray.hpp"
+#include "Buffers/ElementBuffer.hpp"
 
 #define WINDOW_HEIGHT 960
 #define WINDOW_WIDTH 1280
@@ -67,14 +68,13 @@ int main(void)
     Window mainWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Sparrow Renderer");
 
     {
+        VertexArray VAO;
+        VAO.bind();
+
         VertexBuffer VBO(vertices.size() * sizeof(vertices[0]), vertices.data(), GL_STATIC_DRAW);
         VBO.bind();
 
-        VertexArray VAO;
         VAO.linkAttribute(VBO, 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-        glEnableVertexAttribArray(0);
 
         Shader shader;
 

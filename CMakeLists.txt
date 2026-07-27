@@ -11,6 +11,7 @@ set(SOURCES
     src/Window.cpp
     src/Buffers/VertexBuffer.cpp
     src/Buffers/VertexArray.cpp
+    src/Buffers/ElementBuffer.cpp
     src/glad.c
 )
 
