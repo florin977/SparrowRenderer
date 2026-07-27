@@ -9,6 +9,7 @@ set(SOURCES
     src/main.cpp
     src/Shader.cpp
     src/Window.cpp
+    src/Buffers/VertexBuffer.cpp
     src/glad.c
 )
 

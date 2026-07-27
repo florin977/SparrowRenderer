@@ -4,9 +4,9 @@
 
 class Shader
 {
-public:
+private:
     unsigned int programId;
-    
+public:
     Shader();
 
     void attachShader(const unsigned int shaderType, const std::string &path);

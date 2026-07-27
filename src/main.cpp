@@ -7,6 +7,7 @@
 #include <optional>
 #include "Shader.hpp"
 #include "Window.hpp"
+#include "Buffers/VertexBuffer.hpp"
 
 #define WINDOW_HEIGHT 960
 #define WINDOW_WIDTH 1280
@@ -70,11 +71,8 @@ int main(void)
 
         glBindVertexArray(VAO);
 
-        unsigned int VBO = 0;
-        glGenBuffers(1, &VBO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertices[0]), vertices.data(), GL_STATIC_DRAW);
+        VertexBuffer VBO(vertices.size() * sizeof(vertices[0]), vertices.data(), GL_STATIC_DRAW);
+        VBO.bind();
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
         glEnableVertexAttribArray(0);
@@ -107,7 +105,6 @@ int main(void)
         }
 
         glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
     }
 
     return 0;
