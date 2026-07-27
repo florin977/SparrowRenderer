@@ -1,0 +1,99 @@
+#include "Shader.hpp"
+#include <glad/glad.h>
+#include <optional>
+#include <fstream>
+#include <iostream>
+
+static std::optional<std::string> readShaderFile(const std::string &path)
+{
+    std::ifstream file(path, std::ios::ate | std::ios::binary);
+
+    if (!file.is_open())
+    {
+        std::cerr << "Failed to open shader file: " << path << std::endl;
+        return std::nullopt;
+    }
+
+    size_t fileSize = (size_t)file.tellg();
+
+    std::string buffer(fileSize, ' ');
+
+    file.seekg(0);
+
+    file.read(buffer.data(), fileSize);
+
+    file.close();
+    return buffer;
+}
+
+static std::optional<unsigned int> compileShader(const unsigned int shaderType, const std::string &path)
+{
+    int success;
+    char infoLog[512];
+
+    std::optional<std::string> shaderSrc = readShaderFile(path);
+
+    if (!shaderSrc.has_value())
+    {
+        std::cerr << "Shader not provided: " << path << '\n';
+        return std::nullopt;
+    }
+
+    unsigned int shader = glCreateShader(shaderType);
+    const char *shaderCode = shaderSrc.value().c_str();
+
+    glShaderSource(shader, 1, &shaderCode, NULL);
+
+    glCompileShader(shader);
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+
+    if (!success)
+    {
+        glGetShaderInfoLog(shader, 512, NULL, infoLog);
+        std::cerr << "ERROR::SHADER::COMPILATION_FAILED for file: " << path << "\n"
+                  << infoLog << std::endl;
+        return std::nullopt;
+    }
+
+    return shader;
+}
+
+Shader::Shader() {
+    programId = glCreateProgram();
+}
+
+void Shader::attachShader(const unsigned int shaderType, const std::string &path)
+{
+    std::optional<unsigned int> shader = compileShader(shaderType, path);
+
+    if (shader.has_value())
+    {
+        glAttachShader(programId, shader.value());
+
+        glDeleteShader(shader.value());
+    }
+}
+
+void Shader::link()
+{
+    int success;
+    char infoLog[512];
+
+    glLinkProgram(programId);
+    glGetProgramiv(programId, GL_LINK_STATUS, &success);
+
+    if (!success)
+    {
+        glGetProgramInfoLog(programId, 512, NULL, infoLog);
+        std::cerr << "ERROR::PROGRAM::LINKING_FAILED\n"
+                  << infoLog << std::endl;
+    }
+}
+
+void Shader::use() const {
+    glUseProgram(programId);
+}
+
+Shader::~Shader() {
+    glDeleteProgram(programId);
+}
