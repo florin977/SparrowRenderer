@@ -6,27 +6,18 @@
 #include <vector>
 #include <optional>
 #include "Shader.hpp"
+#include "Window.hpp"
 
 #define WINDOW_HEIGHT 960
 #define WINDOW_WIDTH 1280
 
 std::vector<float> vertices(9 * 100000);
 
-void error_callback(int error, const char *description)
-{
-    std::cerr << "GLFW Error [" << error << "]: " << description << std::endl;
-}
 
-void framebuffer_resize_callback(GLFWwindow *window, int width, int height)
+void processInput(Window &window)
 {
-    glViewport(0, 0, width, height);
-}
-
-void processInput(GLFWwindow *window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    {
-        glfwSetWindowShouldClose(window, true);
+    if (window.isKeyPressed(GLFW_KEY_ESCAPE)) {
+        window.setShouldClose(true);
     }
 }
 
@@ -71,43 +62,9 @@ int main(void)
         vertices[9 * i + 8] = v22;
     }
 
-    glfwSetErrorCallback(error_callback);
-
-    /* Initialize the library */
-    if (!glfwInit())
-    {
-        std::cerr << "FATAL: Failed to initialize GLFW!" << std::endl;
-        return -1;
-    }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    /* Create a windowed mode window and its OpenGL context */
-    GLFWwindow *window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Hello, World!", NULL, NULL);
-    if (!window)
-    {
-        std::cerr << "FATAL: Failed to create GLFW window! (Check if your driver supports OpenGL 4.6 Core)" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
+    Window mainWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Sparrow Renderer");
 
     {
-        glfwSetFramebufferSizeCallback(window, framebuffer_resize_callback);
-
-        int version = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-
-        if (version == 0)
-        {
-            std::cerr << "FATAL: Failed to initialize GLAD headers! (Profile mismatch between GLAD and GLFW)" << std::endl;
-            glfwTerminate();
-            return -1;
-        }
-
         unsigned int VAO = 0;
         glGenVertexArrays(1, &VAO);
 
@@ -132,9 +89,9 @@ int main(void)
         glBindVertexArray(VAO);
 
         /* Loop until the user closes the window */
-        while (!glfwWindowShouldClose(window))
+        while (!mainWindow.shouldClose())
         {
-            processInput(window);
+            processInput(mainWindow);
 
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
@@ -143,17 +100,15 @@ int main(void)
             glDrawArrays(GL_TRIANGLES, 0, 3 * 100);
 
             /* Poll for and process events */
-            glfwPollEvents();
+            mainWindow.pollEvents();
 
             /* Swap front and back buffers */
-            glfwSwapBuffers(window);
+            mainWindow.swapBuffers();
         }
 
         glDeleteVertexArrays(1, &VAO);
         glDeleteBuffers(1, &VBO);
     }
-
-    glfwTerminate();
 
     return 0;
 }
