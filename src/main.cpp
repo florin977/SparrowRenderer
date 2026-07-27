@@ -9,7 +9,7 @@
 #define WINDOW_HEIGHT 960
 #define WINDOW_WIDTH 1280
 
-std::vector<float> vertices(9);
+std::vector<float> vertices(9 * 100000);
 
 void error_callback(int error, const char* description)
 {
@@ -59,6 +59,32 @@ int main(void)
     vertices[6] = 0.0;
     vertices[7] = 0.5;
     vertices[8] = 0.0;
+
+    for (int i = 1; i < 100000; i++) {
+        float v00 = 2 * (((float)rand() / (RAND_MAX)) - 0.5);
+        float v01 = 2 * (((float)rand() / (RAND_MAX)) - 0.5);
+        float v02 = 2 * (((float)rand() / (RAND_MAX)) - 0.5);
+
+        float v10 = 2 * (((float)rand() / (RAND_MAX)) - 0.5);
+        float v11 = 2 * (((float)rand() / (RAND_MAX)) - 0.5);
+        float v12 = 2 * (((float)rand() / (RAND_MAX)) - 0.5);
+
+        float v20 = 2 * (((float)rand() / (RAND_MAX)) - 0.5);
+        float v21 = 2 * (((float)rand() / (RAND_MAX)) - 0.5);
+        float v22 = 2 * (((float)rand() / (RAND_MAX)) - 0.5);
+
+        vertices[9 * i] = v00;
+        vertices[9 * i + 1] = v01;
+        vertices[9 * i + 2] = v02;
+
+        vertices[9 * i + 3] = v10;
+        vertices[9 * i + 4] = v11;
+        vertices[9 * i + 5] = v12;
+
+        vertices[9 * i + 6] = v20;
+        vertices[9 * i + 7] = v21;
+        vertices[9 * i + 8] = v22;
+    }
 
     glfwSetErrorCallback(error_callback);
 
@@ -179,7 +205,7 @@ int main(void)
      
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 3 * 100);
 
         /* Poll for and process events */
         glfwPollEvents();
