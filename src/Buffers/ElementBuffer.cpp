@@ -1,11 +1,11 @@
 #include "Buffers/ElementBuffer.hpp"
 
-ElementBuffer::ElementBuffer(const unsigned int* data, unsigned int indicesCount) 
+ElementBuffer::ElementBuffer(const unsigned int *data, unsigned int indicesCount)
 {
     this->indicesCount = indicesCount;
     glGenBuffers(1, &bufferId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferId);
-    
+
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesCount * sizeof(unsigned int), data, GL_STATIC_DRAW);
 }
 

@@ -16,10 +16,10 @@
 
 std::vector<float> vertices(9 * 100000);
 
-
 void processInput(Window &window)
 {
-    if (window.isKeyPressed(GLFW_KEY_ESCAPE)) {
+    if (window.isKeyPressed(GLFW_KEY_ESCAPE))
+    {
         window.setShouldClose(true);
     }
 }
