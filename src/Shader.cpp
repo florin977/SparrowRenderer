@@ -58,7 +58,8 @@ static std::optional<unsigned int> compileShader(const unsigned int shaderType, 
     return shader;
 }
 
-Shader::Shader() {
+Shader::Shader()
+{
     programId = glCreateProgram();
 }
 
@@ -72,6 +73,23 @@ void Shader::attachShader(const unsigned int shaderType, const std::string &path
 
         glDeleteShader(shader.value());
     }
+}
+
+void Shader::setBool(const std::string &uniformName, bool value)
+{
+    glUniform1i(glGetUniformLocation(programId, uniformName.c_str()), value);
+}
+void Shader::setInt(const std::string &uniformName, int value)
+{
+    glUniform1i(glGetUniformLocation(programId, uniformName.c_str()), value);
+}
+void Shader::setFloat(const std::string &uniformName, float value)
+{
+    glUniform1f(glGetUniformLocation(programId, uniformName.c_str()), value);
+}
+void Shader::setUnsignedInt(const std::string &uniformName, unsigned int value)
+{
+    glUniform1ui(glGetUniformLocation(programId, uniformName.c_str()), value);
 }
 
 void Shader::link()
@@ -90,10 +108,12 @@ void Shader::link()
     }
 }
 
-void Shader::use() const {
+void Shader::use() const
+{
     glUseProgram(programId);
 }
 
-Shader::~Shader() {
+Shader::~Shader()
+{
     glDeleteProgram(programId);
 }
