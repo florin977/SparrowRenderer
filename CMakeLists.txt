@@ -7,12 +7,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCES
     src/main.cpp
+    src/glad.c
+    src/stb_image.cpp
     src/Shader.cpp
     src/Window.cpp
     src/Buffers/VertexBuffer.cpp
     src/Buffers/VertexArray.cpp
     src/Buffers/ElementBuffer.cpp
-    src/glad.c
+    src/Texture.cpp
 )
 
 add_executable(prg ${SOURCES})

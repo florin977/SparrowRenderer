@@ -1,5 +1,8 @@
 #version 460 core
 
+in vec2 uvCoord;
+uniform sampler2D sparrowTexture;
+
 out vec4 fragColor;
 
 int xorshift(in int value) {
@@ -33,5 +36,5 @@ void main() {
     float G = nextFloat(seed);
     float B = nextFloat(seed);
 
-    fragColor = vec4(R, G, B, 1.0);
+    fragColor = texture(sparrowTexture, uvCoord);
 }
