@@ -5,18 +5,20 @@
 #include <string>
 #include <vector>
 #include <optional>
+#include <glm/glm.hpp>
 #include "Shader.hpp"
 #include "Window.hpp"
 #include "Buffers/VertexBuffer.hpp"
 #include "Buffers/VertexArray.hpp"
 #include "Buffers/ElementBuffer.hpp"
 #include "Texture.hpp"
+#include "Vertex.hpp"
 
 #define WINDOW_HEIGHT 960
 #define WINDOW_WIDTH 1280
 
-std::vector<float> vertices(20);
-std::vector<unsigned int> indices(6);
+std::array<Vertex, 4> vertices;
+std::array<unsigned int, 6> indices;
 
 void processInput(Window &window)
 {
@@ -29,36 +31,20 @@ void processInput(Window &window)
 int main(void)
 {
     // bottom-left
-    vertices[0] = -0.5;
-    vertices[1] = -0.5;
-    vertices[2] = 0.0;
-    // UV coord
-    vertices[3] = 0.0;
-    vertices[4] = 0.0;
+    vertices[0].pos = glm::vec3(-0.5, -0.5, 0.0);
+    vertices[0].uv = glm::vec2(0.0, 0.0);
 
     // bottom-right
-    vertices[5] = 0.5;
-    vertices[6] = -0.5;
-    vertices[7] = 0.0;
-    // UV coord
-    vertices[8] = 1.0;
-    vertices[9] = 0.0;
+    vertices[1].pos = glm::vec3(0.5, -0.5, 0.0);
+    vertices[1].uv = glm::vec2(1.0, 0.0);
 
     // top-left
-    vertices[10] = -0.5;
-    vertices[11] = 0.5;
-    vertices[12] = 0.0;
-    // UV coord
-    vertices[13] = 0.0;
-    vertices[14] = 1.0;
+    vertices[2].pos = glm::vec3(-0.5, 0.5, 0.0);
+    vertices[2].uv = glm::vec2(0.0, 1.0);
 
     // top-right
-    vertices[15] = 0.5;
-    vertices[16] = 0.5;
-    vertices[17] = 0.0;
-    // UV coord
-    vertices[18] = 1.0;
-    vertices[19] = 1.0;
+    vertices[3].pos = glm::vec3(0.5, 0.5, 0.0);
+    vertices[3].uv = glm::vec2(1.0, 1.0);
 
     indices[0] = 0;
     indices[1] = 1;
@@ -82,9 +68,9 @@ int main(void)
         EBO.bind();
 
         // Vertex position
-        VAO.linkAttribute(VBO, 0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+        VAO.linkAttribute(VBO, 0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
         // Vertex UV coordinate
-        VAO.linkAttribute(VBO, 1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
+        VAO.linkAttribute(VBO, 1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, uv));
         Shader shader;
 
         shader.attachShader(GL_VERTEX_SHADER, "../shaders/vertexShader.vert");
