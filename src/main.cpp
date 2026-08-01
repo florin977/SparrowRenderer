@@ -57,15 +57,8 @@ int main(void)
     indices[5] = 3;
 
     Window mainWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Sparrow Renderer");
-
-    Model backpack("../Assets/LearnOpenGL/scene.gltf");
-    Texture sparrowTexture("../Textures/sparrow.jpg", TEXTURE_DIFFUSE, GL_TEXTURE_2D);
-
     {
-        Material sparrowImage(&sparrowTexture);
-        
-        Mesh cube(vertices, indices, &sparrowImage);   
-
+        Model model("../Assets/Box/BoxTextured.gltf");
         Shader shader("../shaders/vertexShader.vert", "../shaders/fragmentShader.frag");
 
         /* Loop until the user closes the window */
@@ -77,8 +70,7 @@ int main(void)
 
             /* Render here */
             glClear(GL_COLOR_BUFFER_BIT);
-            //cube.Draw(shader);
-            backpack.Draw(shader);
+            model.Draw(shader);
 
             /* Poll for and process events */
             mainWindow.pollEvents();
