@@ -8,6 +8,7 @@ private:
     unsigned int indicesCount;
 
 public:
+    ElementBuffer();
     ElementBuffer(const unsigned int *data, unsigned int indicesCount);
     ~ElementBuffer();
 

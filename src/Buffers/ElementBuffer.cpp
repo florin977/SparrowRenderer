@@ -1,5 +1,10 @@
 #include "Buffers/ElementBuffer.hpp"
 
+ElementBuffer ::ElementBuffer()
+{
+    this->bufferId = 0;
+}
+
 ElementBuffer::ElementBuffer(const unsigned int *data, unsigned int indicesCount)
 {
     this->indicesCount = indicesCount;

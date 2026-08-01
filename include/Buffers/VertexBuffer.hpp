@@ -8,6 +8,7 @@ private:
     unsigned int bufferId;
 
 public:
+    VertexBuffer();
     VertexBuffer(const size_t size, const void *data, GLenum drawType);
     ~VertexBuffer();
 

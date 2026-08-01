@@ -55,7 +55,7 @@ int main(void)
 
     Window mainWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Sparrow Renderer");
 
-    Texture sparrowTexture("../Textures/sparrow.jpg", GL_TEXTURE_2D);
+    Texture sparrowTexture("../Textures/sparrow.jpg", TEXTURE_ALBEDO, GL_TEXTURE_2D);
 
     {
         VertexArray VAO;

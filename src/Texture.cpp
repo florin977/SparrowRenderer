@@ -3,9 +3,10 @@
 #include <glad/glad.h>
 #include <iostream>
 
-Texture::Texture(const std::string &path, const unsigned int textureType)
+Texture::Texture(const std::string &path, const unsigned int textureType, const unsigned int textureTarget)
 {
     this->textureType = textureType;
+    this->textureTarget = textureTarget;
 
     stbi_set_flip_vertically_on_load(true);
     unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
@@ -13,7 +14,7 @@ Texture::Texture(const std::string &path, const unsigned int textureType)
     if (data)
     {
         glGenTextures(1, &textureId);
-        glBindTexture(this->textureType, textureId);
+        glBindTexture(this->textureTarget, textureId);
 
         unsigned int format;
         switch (nrChannels)
@@ -37,21 +38,21 @@ Texture::Texture(const std::string &path, const unsigned int textureType)
         // In case image's width is not a multiple of 4, the texture appears diagonally skewed. This prevents it.
         // WARNING: It is slower to upload to the GPU.
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        
-        if (this->textureType == GL_TEXTURE_2D)
+
+        if (this->textureTarget == GL_TEXTURE_2D)
         {
-            glTexImage2D(this->textureType, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(this->textureType);
+            glTexImage2D(this->textureTarget, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(this->textureTarget);
 
             // Default warping and filtering parameters
-            glTexParameteri(this->textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(this->textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(this->textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            glTexParameteri(this->textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(this->textureTarget, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(this->textureTarget, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(this->textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(this->textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         }
         else
         {
-            std::cerr << "Unsupported texture type: " << this->textureType << std::endl;
+            std::cerr << "Unsupported texture target: " << this->textureTarget << std::endl;
         }
     }
     else
@@ -65,12 +66,12 @@ Texture::Texture(const std::string &path, const unsigned int textureType)
 void Texture::bind(const unsigned int textureUnit) const
 {
     glActiveTexture(GL_TEXTURE0 + textureUnit);
-    glBindTexture(textureType, textureId);
+    glBindTexture(textureTarget, textureId);
 }
 void Texture::unbind(const unsigned int textureUnit) const
 {
     glActiveTexture(GL_TEXTURE0 + textureUnit);
-    glBindTexture(textureType, 0);
+    glBindTexture(textureTarget, 0);
 }
 
 Texture::~Texture()

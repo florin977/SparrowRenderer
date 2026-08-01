@@ -1,5 +1,10 @@
 #include "Buffers/VertexBuffer.hpp"
 
+VertexBuffer::VertexBuffer()
+{
+    this->bufferId = 0;
+}
+
 VertexBuffer::VertexBuffer(const size_t size, const void *data, GLenum drawType)
 {
     glGenBuffers(1, &bufferId);
