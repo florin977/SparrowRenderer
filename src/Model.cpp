@@ -7,6 +7,7 @@ Texture *Model::getTexture(const std::string &fullPath, const unsigned int textu
     if (it == loadedTextures.end())
     {
         loadedTextures.emplace(fullPath, Texture(fullPath, textureType, GL_TEXTURE_2D));
+        return &loadedTextures[fullPath];
     }
 
     return &(it->second);
@@ -105,7 +106,7 @@ void Model::processMesh(aiMesh *mesh, const aiScene *scene)
 
     this->loadedMaterials.push_back(std::move(material));
 
-    this->meshes.emplace_back(Mesh(vertices, indices, rawMaterialPtr));
+    this->meshes.emplace_back(vertices, indices, rawMaterialPtr);
 }
 
 void Model::processNode(aiNode *node, const aiScene *scene)
@@ -149,10 +150,7 @@ void Model::Draw(Shader &shader)
 
     while (it != this->meshes.end())
     {
-        std::cout << "In meshes draw" << std::endl;
         it->Draw(shader);
-        std::cout << "In meshes draw 2" << std::endl;
         it++;
-        std::cout << "In meshes draw3 " << std::endl;
     }
 }
