@@ -2,10 +2,6 @@
 
 void Mesh::setupMesh()
 {
-    this->VAO = VertexArray();
-    this->VBO = VertexBuffer(this->vertices.size() * sizeof(this->vertices[0]), this->vertices.data(), GL_STATIC_DRAW);
-    this->EBO = ElementBuffer(this->indices.data(), indices.size());
-
     this->VAO.bind();
     this->VBO.bind();
     this->EBO.bind();
@@ -16,11 +12,25 @@ void Mesh::setupMesh()
 }
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Material *material)
-    : vertices(std::move(vertices)), indices(std::move(indices)), material(material)
+    : vertices(std::move(vertices)), indices(std::move(indices)), material(material),
+      // RVO
+      VAO(), VBO(this->vertices.size() * sizeof(this->vertices[0]), this->vertices.data(), GL_STATIC_DRAW), EBO(this->indices.data(), this->indices.size())
 {
     setupMesh();
 }
 
-void Mesh::Draw(const Shader &shader) {
+void Mesh::Draw(const Shader &shader)
+{
+    if (material)
+    {
+        material->bind();
+    }
 
+    this->VAO.bind();
+
+    shader.use();
+
+    glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
+
+    VAO.unbind();
 }

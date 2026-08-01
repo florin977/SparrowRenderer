@@ -10,18 +10,17 @@
 class Mesh
 {
 private:
-    VertexArray VAO;
-    VertexBuffer VBO;
-    ElementBuffer EBO;
-    void setupMesh();
-
-public:
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     Material *material;
+    VertexArray VAO;
+    VertexBuffer VBO;
+    ElementBuffer EBO;
 
+    void setupMesh();
+
+public:
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Material *material);
-    ~Mesh();
 
     void Draw(const Shader &shader);
 };

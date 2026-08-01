@@ -3,11 +3,12 @@
 #include <glad/glad.h>
 #include <iostream>
 
-Texture::Texture(const std::string &path, const unsigned int textureType, const unsigned int textureTarget)
-{
-    this->textureType = textureType;
-    this->textureTarget = textureTarget;
+Texture::Texture() : path(""), textureType(0), textureTarget(0), textureId(0), width(0), height(0), nrChannels(0)
+{}
 
+Texture::Texture(const std::string &path, const unsigned int textureType, const unsigned int textureTarget)
+: path(path), textureType(textureType), textureTarget(textureTarget)
+{
     stbi_set_flip_vertically_on_load(true);
     unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
 

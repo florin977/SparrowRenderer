@@ -13,12 +13,14 @@
 #include "Buffers/ElementBuffer.hpp"
 #include "Texture.hpp"
 #include "Vertex.hpp"
+#include "Mesh.hpp"
+#include "Material.hpp"
 
 #define WINDOW_HEIGHT 960
 #define WINDOW_WIDTH 1280
 
-std::array<Vertex, 4> vertices;
-std::array<unsigned int, 6> indices;
+std::vector<Vertex> vertices(4);
+std::vector<unsigned int> indices(6);
 
 void processInput(Window &window)
 {
@@ -55,22 +57,13 @@ int main(void)
 
     Window mainWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Sparrow Renderer");
 
-    Texture sparrowTexture("../Textures/sparrow.jpg", TEXTURE_ALBEDO, GL_TEXTURE_2D);
+    Texture sparrowTexture("../Textures/sparrow.jpg", TEXTURE_DIFFUSE, GL_TEXTURE_2D);
 
     {
-        VertexArray VAO;
-        VAO.bind();
+        Material sparrowImage(&sparrowTexture);
+        
+        Mesh cube(vertices, indices, &sparrowImage);   
 
-        VertexBuffer VBO(vertices.size() * sizeof(vertices[0]), vertices.data(), GL_STATIC_DRAW);
-        VBO.bind();
-
-        ElementBuffer EBO(indices.data(), indices.size());
-        EBO.bind();
-
-        // Vertex position
-        VAO.linkAttribute(VBO, 0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
-        // Vertex UV coordinate
-        VAO.linkAttribute(VBO, 1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, uv));
         Shader shader;
 
         shader.attachShader(GL_VERTEX_SHADER, "../shaders/vertexShader.vert");
@@ -78,8 +71,6 @@ int main(void)
         shader.link();
         shader.use();
 
-        VAO.bind();
-        sparrowTexture.bind(0);
         shader.setInt("sparrowTexture", 0);
 
         /* Loop until the user closes the window */
@@ -91,7 +82,7 @@ int main(void)
 
             /* Render here */
             glClear(GL_COLOR_BUFFER_BIT);
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+            cube.Draw(shader);
 
             /* Poll for and process events */
             mainWindow.pollEvents();

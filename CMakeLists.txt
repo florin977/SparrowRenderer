@@ -15,6 +15,8 @@ set(SOURCES
     src/Buffers/VertexArray.cpp
     src/Buffers/ElementBuffer.cpp
     src/Texture.cpp
+    src/Material.cpp
+    src/Mesh.cpp
 )
 
 include(FetchContent)
