@@ -6,7 +6,7 @@ Texture *Model::getTexture(const std::string &fullPath, const unsigned int textu
 
     if (it == loadedTextures.end())
     {
-        loadedTextures.emplace(fullPath, Texture(fullPath, textureType, GL_TEXTURE_2D));
+        loadedTextures.try_emplace(fullPath, fullPath, textureType, GL_TEXTURE_2D);
         return &loadedTextures[fullPath];
     }
 
@@ -63,6 +63,7 @@ void Model::processMesh(aiMesh *mesh, const aiScene *scene)
 
         if (diffuseCount > 0)
         {
+
             mat->GetTexture(aiTextureType_DIFFUSE, 0, &str);
 
             if (diffuseCount > 1)
