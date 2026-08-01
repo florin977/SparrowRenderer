@@ -22,5 +22,5 @@ private:
 public:
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Material *material);
 
-    void Draw(const Shader &shader);
+    void Draw(Shader &shader);
 };

@@ -19,7 +19,7 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Mate
     setupMesh();
 }
 
-void Mesh::Draw(const Shader &shader)
+void Mesh::Draw(Shader &shader)
 {
     if (material)
     {
