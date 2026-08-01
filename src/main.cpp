@@ -61,6 +61,7 @@ int main(void)
         Model model("../Assets/Box/BoxTextured.gltf");
         Shader shader("../shaders/vertexShader.vert", "../shaders/fragmentShader.frag");
 
+        glEnable(GL_DEPTH_TEST);
         /* Loop until the user closes the window */
         while (!mainWindow.shouldClose())
         {
@@ -69,7 +70,7 @@ int main(void)
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
             /* Render here */
-            glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             model.Draw(shader);
 
             /* Poll for and process events */
