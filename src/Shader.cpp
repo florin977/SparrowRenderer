@@ -58,9 +58,16 @@ static std::optional<unsigned int> compileShader(const unsigned int shaderType, 
     return shader;
 }
 
-Shader::Shader()
+Shader::Shader(const std::string &vertexShaderPath, const std::string &fragmetShaderPath)
 {
-    programId = glCreateProgram();
+    this->programId = glCreateProgram();
+
+    if (vertexShaderPath != "")
+        this->attachShader(GL_VERTEX_SHADER, vertexShaderPath);
+    if (fragmetShaderPath != "")
+        this->attachShader(GL_FRAGMENT_SHADER, fragmetShaderPath);
+
+    this->link();
 }
 
 void Shader::attachShader(const unsigned int shaderType, const std::string &path)

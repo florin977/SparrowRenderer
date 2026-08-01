@@ -10,7 +10,7 @@ private:
     unsigned int programId;
 
 public:
-    Shader();
+    Shader(const std::string &vertexShaderPath = "", const std::string &fragmetShaderPath = "");
 
     void attachShader(const unsigned int shaderType, const std::string &path);
 

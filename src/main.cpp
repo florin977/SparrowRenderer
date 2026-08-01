@@ -64,14 +64,7 @@ int main(void)
         
         Mesh cube(vertices, indices, &sparrowImage);   
 
-        Shader shader;
-
-        shader.attachShader(GL_VERTEX_SHADER, "../shaders/vertexShader.vert");
-        shader.attachShader(GL_FRAGMENT_SHADER, "../shaders/fragmentShader.frag");
-        shader.link();
-        shader.use();
-
-        shader.setInt("sparrowTexture", 0);
+        Shader shader("../shaders/vertexShader.vert", "../shaders/fragmentShader.frag");
 
         /* Loop until the user closes the window */
         while (!mainWindow.shouldClose())
