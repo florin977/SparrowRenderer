@@ -12,7 +12,7 @@ Texture *Model::getTexture(const std::string &fullPath, const unsigned int textu
     return &(it->second);
 }
 
-Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
+void Model::processMesh(aiMesh *mesh, const aiScene *scene)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -70,7 +70,6 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
             }
 
             const std::string fullPath = this->directory + "/" + str.C_Str();
-            std::cout << fullPath << std::endl;
             diffusePtr = this->getTexture(fullPath, TEXTURE_DIFFUSE);
         }
 
@@ -84,7 +83,6 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
             }
 
             const std::string fullPath = this->directory + "/" + str.C_Str();
-            std::cout << fullPath + str.C_Str() << std::endl;
             specularPtr = this->getTexture(fullPath, TEXTURE_SPECULAR);
         }
 
@@ -98,7 +96,6 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
             }
 
             const std::string fullPath = this->directory + "/" + str.C_Str();
-            std::cout << fullPath << std::endl;
             normalPtr = this->getTexture(fullPath, TEXTURE_NORMAL);
         }
     }
@@ -108,7 +105,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 
     this->loadedMaterials.push_back(std::move(material));
 
-    return Mesh(vertices, indices, rawMaterialPtr);
+    this->meshes.emplace_back(Mesh(vertices, indices, rawMaterialPtr));
 }
 
 void Model::processNode(aiNode *node, const aiScene *scene)
@@ -117,7 +114,7 @@ void Model::processNode(aiNode *node, const aiScene *scene)
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(processMesh(mesh, scene));
+        processMesh(mesh, scene);
     }
     // Then do the same for each of its children
     for (unsigned int i = 0; i < node->mNumChildren; i++)
@@ -148,8 +145,14 @@ Model::Model(const std::string &path)
 
 void Model::Draw(Shader &shader)
 {
-    for (int i = 0; i < this->meshes.size(); i++)
+    auto it = this->meshes.begin();
+
+    while (it != this->meshes.end())
     {
-        this->meshes[i].Draw(shader);
+        std::cout << "In meshes draw" << std::endl;
+        it->Draw(shader);
+        std::cout << "In meshes draw 2" << std::endl;
+        it++;
+        std::cout << "In meshes draw3 " << std::endl;
     }
 }

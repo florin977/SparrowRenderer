@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <list>
 #include <memory>
 #include <string>
 #include <iostream>
@@ -16,12 +17,12 @@ class Model
 private:
     std::unordered_map<std::string, Texture> loadedTextures;
     std::vector<std::unique_ptr<Material>> loadedMaterials;
-    std::vector<Mesh> meshes;
+    std::list<Mesh> meshes;
     std::string directory;
 
     void loadModel(const std::string &path);
     void processNode(aiNode *node, const aiScene *scene);
-    Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+    void processMesh(aiMesh *mesh, const aiScene *scene);
 
 public:
     Model(const std::string &path);

@@ -17,6 +17,7 @@ set(SOURCES
     src/Texture.cpp
     src/Material.cpp
     src/Mesh.cpp
+    src/Model.cpp
 )
 
 include(FetchContent)

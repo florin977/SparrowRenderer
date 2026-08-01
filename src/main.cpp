@@ -15,6 +15,7 @@
 #include "Vertex.hpp"
 #include "Mesh.hpp"
 #include "Material.hpp"
+#include "Model.hpp"
 
 #define WINDOW_HEIGHT 960
 #define WINDOW_WIDTH 1280
@@ -57,6 +58,7 @@ int main(void)
 
     Window mainWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Sparrow Renderer");
 
+    Model backpack("../Assets/LearnOpenGL/scene.gltf");
     Texture sparrowTexture("../Textures/sparrow.jpg", TEXTURE_DIFFUSE, GL_TEXTURE_2D);
 
     {
@@ -75,7 +77,8 @@ int main(void)
 
             /* Render here */
             glClear(GL_COLOR_BUFFER_BIT);
-            cube.Draw(shader);
+            //cube.Draw(shader);
+            backpack.Draw(shader);
 
             /* Poll for and process events */
             mainWindow.pollEvents();
