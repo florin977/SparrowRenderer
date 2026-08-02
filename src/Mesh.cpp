@@ -28,8 +28,6 @@ void Mesh::Draw(Shader &shader)
 
     this->VAO.bind();
 
-    shader.use();
-
     glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
 
     VAO.unbind();

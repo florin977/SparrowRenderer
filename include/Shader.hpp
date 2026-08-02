@@ -1,6 +1,9 @@
 #pragma once
 
 #include <string>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 // TODO: Maybe add a uniform cache in the future
 
@@ -19,6 +22,7 @@ public:
     void setInt(const std::string &uniformName, int value);
     void setFloat(const std::string &uniformName, float value);
     void setUnsignedInt(const std::string &uniformName, unsigned int value);
+    void setMatrix4(const unsigned int layoutLocation, const glm::mat4 matrix);
 
     void link();
 

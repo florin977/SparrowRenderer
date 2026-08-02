@@ -98,6 +98,10 @@ void Shader::setUnsignedInt(const std::string &uniformName, unsigned int value)
 {
     glProgramUniform1ui(programId, glGetUniformLocation(programId, uniformName.c_str()), value);
 }
+void Shader::setMatrix4(const unsigned int layoutLocation, const glm::mat4 matrix)
+{
+    glUniformMatrix4fv(layoutLocation, 1, GL_FALSE, glm::value_ptr(matrix));
+}
 
 void Shader::link()
 {

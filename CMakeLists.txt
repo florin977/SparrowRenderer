@@ -18,6 +18,7 @@ set(SOURCES
     src/Material.cpp
     src/Mesh.cpp
     src/Model.cpp
+    src/Entity.cpp
 )
 
 include(FetchContent)

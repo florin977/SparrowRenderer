@@ -16,6 +16,7 @@
 #include "Mesh.hpp"
 #include "Material.hpp"
 #include "Model.hpp"
+#include "Entity.hpp"
 
 #define WINDOW_HEIGHT 960
 #define WINDOW_WIDTH 1280
@@ -31,47 +32,31 @@ void processInput(Window &window)
     }
 }
 
+// Call shader.use() BEFORE drawing
+
 int main(void)
 {
-    // bottom-left
-    vertices[0].pos = glm::vec3(-0.5, -0.5, 0.0);
-    vertices[0].uv = glm::vec2(0.0, 0.0);
-
-    // bottom-right
-    vertices[1].pos = glm::vec3(0.5, -0.5, 0.0);
-    vertices[1].uv = glm::vec2(1.0, 0.0);
-
-    // top-left
-    vertices[2].pos = glm::vec3(-0.5, 0.5, 0.0);
-    vertices[2].uv = glm::vec2(0.0, 1.0);
-
-    // top-right
-    vertices[3].pos = glm::vec3(0.5, 0.5, 0.0);
-    vertices[3].uv = glm::vec2(1.0, 1.0);
-
-    indices[0] = 0;
-    indices[1] = 1;
-    indices[2] = 2;
-    indices[3] = 1;
-    indices[4] = 2;
-    indices[5] = 3;
-
     Window mainWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Sparrow Renderer");
     {
-        Model model("../Assets/Box/BoxTextured.gltf");
         Shader shader("../shaders/vertexShader.vert", "../shaders/fragmentShader.frag");
+        Model model("../Assets/Box/BoxTextured.gltf");
+        Entity cube(&model);
+
+        cube.translate(glm::vec3(0.5, 0.0, 0));
+        cube.rotate(glm::vec3(0.0, 45.0, 15.0));
 
         glEnable(GL_DEPTH_TEST);
+
         /* Loop until the user closes the window */
         while (!mainWindow.shouldClose())
         {
             processInput(mainWindow);
 
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-
-            /* Render here */
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            model.Draw(shader);
+
+            shader.use();
+            cube.Draw(shader);
 
             /* Poll for and process events */
             mainWindow.pollEvents();
