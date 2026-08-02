@@ -12,8 +12,10 @@ glm::mat4 Camera::generateProjectionMatrix()
 
 Camera::Camera(glm::vec3 position, glm::vec3 front, glm::vec3 up, float fov, float aspectRatio, float nearPlane, float farPlane)
     : position(position), front(front), up(up), fov(fov), aspectRatio(aspectRatio), nearPlane(nearPlane), farPlane(farPlane),
-      isViewDirty(false), isProjectionDirty(false), viewMatrix(generateViewMatrix()), projectionMatrix(generateProjectionMatrix())
+      isViewDirty(true), isProjectionDirty(true), viewMatrix(generateViewMatrix()), projectionMatrix(generateProjectionMatrix()), UBO(2 * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW)
 {
+    // Transmit view and projection matrices to layout(binding = 0)
+    this->UBO.setBindingPoint(0);
 }
 
 glm::mat4 Camera::getViewMatrix()
@@ -78,4 +80,21 @@ void Camera::setFarPlane(float newFarPlane)
 {
     this->farPlane = newFarPlane;
     isProjectionDirty = true;
+}
+
+void Camera::Update()
+{
+    if (this->isViewDirty)
+    {
+        this->viewMatrix = generateViewMatrix();
+        this->UBO.updateData(0, sizeof(glm::mat4), glm::value_ptr(this->viewMatrix));
+        this->isViewDirty = false;
+    }
+
+    if (this->isProjectionDirty)
+    {
+        this->projectionMatrix = generateProjectionMatrix();
+        this->UBO.updateData(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(this->projectionMatrix));
+        this->isProjectionDirty = false;
+    }
 }

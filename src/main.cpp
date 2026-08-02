@@ -11,6 +11,7 @@
 #include "Buffers/VertexBuffer.hpp"
 #include "Buffers/VertexArray.hpp"
 #include "Buffers/ElementBuffer.hpp"
+#include "Buffers/UniformBuffer.hpp"
 #include "Texture.hpp"
 #include "Vertex.hpp"
 #include "Mesh.hpp"
@@ -39,12 +40,10 @@ int main(void)
 {
     Window mainWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Sparrow Renderer");
     {
+        Camera mainCamera(glm::vec3(0.0, 0.5, 5.0));
         Shader shader("../shaders/vertexShader.vert", "../shaders/fragmentShader.frag");
         Model model("../Assets/Box/BoxTextured.gltf");
         Entity cube(&model);
-
-        cube.translate(glm::vec3(0.5, 0.0, 0));
-        cube.rotate(glm::vec3(0.0, 45.0, 15.0));
 
         glEnable(GL_DEPTH_TEST);
 
@@ -55,6 +54,8 @@ int main(void)
 
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            mainCamera.Update();
 
             shader.use();
             cube.Draw(shader);

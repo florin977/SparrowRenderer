@@ -1,9 +1,5 @@
-#include "UniformBuffer.hpp"
+#include "Buffers/UniformBuffer.hpp"
 
-UniformBuffer::UniformBuffer()
-{
-    this->bufferId = 0;
-}
 UniformBuffer::UniformBuffer(const size_t size, const void *data, const unsigned int drawType)
 {
     glGenBuffers(1, &this->bufferId);
@@ -23,4 +19,16 @@ void UniformBuffer::bind() const
 void UniformBuffer::unbind() const
 {
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+void UniformBuffer::setBindingPoint(unsigned int bindingPoint) const
+{
+    glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, this->bufferId);
+}
+
+void UniformBuffer::updateData(size_t offset, size_t size, const void *data) const
+{
+    this->bind();
+    glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
+    this->unbind();
 }

@@ -8,7 +8,7 @@ layout(location = 0) uniform mat4 modelMatrix;
 layout(binding = 0, std140) uniform cameraData {
     mat4 viewMatrix;
     mat4 projectionMatrix;
-}
+};
 
 out vec2 uvCoord;
 

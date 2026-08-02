@@ -16,7 +16,7 @@ glm::mat4 Entity::generateModelMatrix()
 }
 
 Entity::Entity(Model *loadedModel, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
-    : position(position), rotation(rotation), scale(scale), model(loadedModel), isDirty(false), modelMatrix(generateModelMatrix())
+    : position(position), rotation(rotation), scale(scale), model(loadedModel), isDirty(true), modelMatrix(generateModelMatrix())
 {
 }
 
