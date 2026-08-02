@@ -7,8 +7,8 @@ void Mesh::setupMesh()
     this->EBO.bind();
 
     VAO.linkAttribute(this->VBO, 0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, pos));
-    VAO.linkAttribute(this->VBO, 1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, uv));
-    VAO.linkAttribute(this->VBO, 2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, normal));
+    VAO.linkAttribute(this->VBO, 1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, normal));
+    VAO.linkAttribute(this->VBO, 2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, uv));
 }
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, Material *material)

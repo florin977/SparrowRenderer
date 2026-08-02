@@ -108,10 +108,11 @@ int main(void)
         camera = &mainCamera;
 
         Shader shader("../shaders/vertexShader.vert", "../shaders/fragmentShader.frag");
-        Model model("../Assets/Box/BoxTextured.gltf");
+        Model model("../Assets/LearnOpenGL/scene.gltf");
         Entity cube(&model);
 
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
 
         /* Loop until the user closes the window */
         while (!mainWindow.shouldClose())

@@ -9,7 +9,6 @@ Texture::Texture() : path(""), textureType(0), textureTarget(0), textureId(0), w
 Texture::Texture(const std::string &path, const unsigned int textureType, const unsigned int textureTarget)
 : path(path), textureType(textureType), textureTarget(textureTarget)
 {
-    stbi_set_flip_vertically_on_load(true);
     unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
 
     if (data)

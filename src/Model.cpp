@@ -37,7 +37,7 @@ void Model::processMesh(aiMesh *mesh, const aiScene *scene)
         }
         glm::vec3 normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
 
-        Vertex vertex(pos, uv, normal);
+        Vertex vertex(pos, normal, uv);
         vertices.push_back(vertex);
     }
 
