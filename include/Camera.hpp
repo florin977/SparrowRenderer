@@ -11,6 +11,9 @@ private:
     glm::vec3 front;
     glm::vec3 up;
 
+    float yaw;
+    float pitch;
+
     float fov;
     float aspectRatio;
     float nearPlane;
@@ -26,6 +29,7 @@ private:
     glm::mat4 generateProjectionMatrix();
 
     UniformBuffer UBO;
+    void updateCameraVectors();
 
 public:
     Camera(glm::vec3 position = glm::vec3(0.0, 0.0, 1.0), glm::vec3 front = glm::vec3(0.0, 0.0, -1.0), glm::vec3 up = glm::vec3(0.0, 1.0, 0.0),
@@ -42,6 +46,12 @@ public:
     void setAspectRatio(float newAspectRatio);
     void setNearPlane(float newNearPlane);
     void setFarPlane(float newFarPlane);
+
+    void moveForward(float distance);
+    void moveRight(float distance);
+    void moveUp(float distance);
+    void translate(glm::vec3 translation);
+    void rotate(float yawOffset, float pitchOffset);
 
     void Update();
 };
