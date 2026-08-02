@@ -17,8 +17,9 @@
 #include "Material.hpp"
 #include "Model.hpp"
 #include "Entity.hpp"
+#include "Camera.hpp"
 
-#define WINDOW_HEIGHT 960
+#define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
 
 std::vector<Vertex> vertices(4);

@@ -19,6 +19,7 @@ set(SOURCES
     src/Mesh.cpp
     src/Model.cpp
     src/Entity.cpp
+    src/Camera.cpp
 )
 
 include(FetchContent)
