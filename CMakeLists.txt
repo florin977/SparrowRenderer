@@ -14,6 +14,7 @@ set(SOURCES
     src/Buffers/VertexBuffer.cpp
     src/Buffers/VertexArray.cpp
     src/Buffers/ElementBuffer.cpp
+    src/Buffers/UniformBuffer.cpp
     src/Texture.cpp
     src/Material.cpp
     src/Mesh.cpp
