@@ -1,5 +1,28 @@
 #include "Model.hpp"
 
+glm::mat4 aiMat4ToGlmMat4(aiMatrix4x4 &aiMat)
+{
+    glm::mat4 localTransform;
+    localTransform[0][0] = aiMat.a1;
+    localTransform[1][0] = aiMat.a2;
+    localTransform[2][0] = aiMat.a3;
+    localTransform[3][0] = aiMat.a4;
+    localTransform[0][1] = aiMat.b1;
+    localTransform[1][1] = aiMat.b2;
+    localTransform[2][1] = aiMat.b3;
+    localTransform[3][1] = aiMat.b4;
+    localTransform[0][2] = aiMat.c1;
+    localTransform[1][2] = aiMat.c2;
+    localTransform[2][2] = aiMat.c3;
+    localTransform[3][2] = aiMat.c4;
+    localTransform[0][3] = aiMat.d1;
+    localTransform[1][3] = aiMat.d2;
+    localTransform[2][3] = aiMat.d3;
+    localTransform[3][3] = aiMat.d4;
+
+    return localTransform;
+}
+
 Texture *Model::getTexture(const std::string &fullPath, const unsigned int textureType)
 {
     auto it = loadedTextures.find(fullPath);
@@ -13,7 +36,7 @@ Texture *Model::getTexture(const std::string &fullPath, const unsigned int textu
     return &(it->second);
 }
 
-void Model::processMesh(aiMesh *mesh, const aiScene *scene)
+unsigned int Model::processMesh(aiMesh *mesh, const aiScene *scene)
 {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
@@ -108,20 +131,35 @@ void Model::processMesh(aiMesh *mesh, const aiScene *scene)
     this->loadedMaterials.push_back(std::move(material));
 
     this->meshes.emplace_back(vertices, indices, rawMaterialPtr);
+
+    return this->meshes.size() - 1;
 }
 
-void Model::processNode(aiNode *node, const aiScene *scene)
+void Model::processNode(aiNode *node, const aiScene *scene, const glm::mat4 &parentTransform)
 {
+    aiMatrix4x4 localMatrix = node->mTransformation;
+
+    glm::mat4 localTransform = aiMat4ToGlmMat4(localMatrix);
+    glm::mat4 globalNodeTransform = parentTransform * localTransform;
+
     // Process all the node's meshes (if any)
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-        processMesh(mesh, scene);
+        unsigned int meshIndex = processMesh(mesh, scene);
+
+        ModelNode newNode;
+        newNode.name = node->mName.C_Str();
+        newNode.localTransform = globalNodeTransform;
+        newNode.meshIndex = meshIndex;
+
+        this->nodes.push_back(newNode);
     }
+
     // Then do the same for each of its children
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        processNode(node->mChildren[i], scene);
+        processNode(node->mChildren[i], scene, globalNodeTransform);
     }
 }
 
@@ -137,7 +175,7 @@ void Model::loadModel(const std::string &path)
 
     this->directory = path.substr(0, path.find_last_of('/'));
 
-    processNode(scene->mRootNode, scene);
+    processNode(scene->mRootNode, scene, glm::mat4(1.0));
 }
 
 Model::Model(const std::string &path)
@@ -145,13 +183,16 @@ Model::Model(const std::string &path)
     loadModel(path);
 }
 
-void Model::Draw(Shader &shader)
+void Model::Draw(Shader &shader, const glm::mat4 &modelMatrix)
 {
-    auto it = this->meshes.begin();
-
-    while (it != this->meshes.end())
+    for (unsigned int i = 0; i < this->nodes.size(); i++)
     {
-        it->Draw(shader);
-        it++;
+        glm::mat4 meshMatrix = modelMatrix;// * this->nodes[i].localTransform;
+
+        // ModelMatrix is at layout(location = 0) always
+        shader.setMatrix4(0, meshMatrix);
+
+        unsigned int meshIndex = this->nodes[i].meshIndex;
+        this->meshes[meshIndex].Draw(shader);
     }
 }

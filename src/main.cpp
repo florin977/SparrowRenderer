@@ -105,6 +105,7 @@ int main(void)
         glfwSetCursorPosCallback(mainWindow.getGLFWwindow(), mouse_callback);
 
         Camera mainCamera;
+        mainCamera.setFarPlane(2000.0);
         camera = &mainCamera;
 
         Shader shader("../shaders/vertexShader.vert", "../shaders/fragmentShader.frag");
