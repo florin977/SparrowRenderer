@@ -60,36 +60,47 @@ void mouse_callback(GLFWwindow *window, double xPosIn, double yPosIn)
 
 void processInput(Window &window, Camera &camera)
 {
+    float speed = 0.5;
+
     if (window.isKeyPressed(GLFW_KEY_ESCAPE))
     {
         window.setShouldClose(true);
     }
 
+    if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT))
+    {
+        speed = 3.0;
+    }
+    else
+    {
+        speed = 0.5;
+    }
+
     if (window.isKeyPressed(GLFW_KEY_W))
     {
-        camera.moveForward(0.2);
+        camera.moveForward(speed);
     }
     if (window.isKeyPressed(GLFW_KEY_S))
     {
-        camera.moveForward(-0.2);
+        camera.moveForward(-speed);
     }
 
     if (window.isKeyPressed(GLFW_KEY_A))
     {
-        camera.moveRight(-0.2);
+        camera.moveRight(-speed);
     }
     if (window.isKeyPressed(GLFW_KEY_D))
     {
-        camera.moveRight(0.2);
+        camera.moveRight(speed);
     }
 
-    if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT))
+    if (window.isKeyPressed(GLFW_KEY_SPACE))
     {
-        camera.moveUp(0.2);
+        camera.moveUp(speed);
     }
     if (window.isKeyPressed(GLFW_KEY_LEFT_CONTROL))
     {
-        camera.moveUp(-0.2);
+        camera.moveUp(-speed);
     }
 }
 
