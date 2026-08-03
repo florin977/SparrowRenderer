@@ -7,9 +7,34 @@ UniformBuffer::UniformBuffer(const size_t size, const void *data, const unsigned
     glBufferData(GL_UNIFORM_BUFFER, size, data, drawType);
     this->unbind();
 }
+
+UniformBuffer::UniformBuffer(UniformBuffer &&other) noexcept
+    : bufferId(other.bufferId)
+{
+    other.bufferId = 0;
+}
+
+UniformBuffer &UniformBuffer::operator=(UniformBuffer &&other) noexcept
+{
+    if (this != &other)
+    {
+        if (this->bufferId != 0)
+        {
+            glDeleteBuffers(1, &this->bufferId);
+        }
+
+        this->bufferId = other.bufferId;
+        other.bufferId = 0;
+    }
+    return *this;
+}
+
 UniformBuffer::~UniformBuffer()
 {
-    glDeleteBuffers(1, &this->bufferId);
+    if (this->bufferId != 0)
+    {
+        glDeleteBuffers(1, &this->bufferId);
+    }
 }
 
 void UniformBuffer::bind() const

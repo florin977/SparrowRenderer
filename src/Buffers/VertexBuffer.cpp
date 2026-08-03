@@ -13,9 +13,33 @@ VertexBuffer::VertexBuffer(const size_t size, const void *data, GLenum drawType)
     unbind();
 }
 
+VertexBuffer::VertexBuffer(VertexBuffer &&other) noexcept
+    : bufferId(other.bufferId)
+{
+    other.bufferId = 0;
+}
+
+VertexBuffer &VertexBuffer::operator=(VertexBuffer &&other) noexcept
+{
+    if (this != &other)
+    {
+        if (this->bufferId != 0)
+        {
+            glDeleteBuffers(1, &this->bufferId);
+        }
+        this->bufferId = other.bufferId;
+        other.bufferId = 0;
+    }
+
+    return *this;
+}
+
 VertexBuffer::~VertexBuffer()
 {
-    glDeleteBuffers(1, &bufferId);
+    if (this->bufferId != 0)
+    {
+        glDeleteBuffers(1, &bufferId);
+    }
 }
 
 void VertexBuffer::bind() const

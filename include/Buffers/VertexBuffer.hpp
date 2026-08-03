@@ -10,6 +10,13 @@ private:
 public:
     VertexBuffer();
     VertexBuffer(const size_t size, const void *data, GLenum drawType);
+
+    VertexBuffer(const VertexBuffer &other) = delete;
+    VertexBuffer &operator=(const VertexBuffer &other) = delete;
+
+    VertexBuffer(VertexBuffer &&other) noexcept;
+    VertexBuffer &operator=(VertexBuffer &&other) noexcept;
+
     ~VertexBuffer();
 
     void bind() const;

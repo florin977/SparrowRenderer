@@ -4,16 +4,20 @@
 
 class UniformBuffer
 {
-    private:
+private:
     unsigned int bufferId;
 
-    public:
+public:
     // Prevent the compiler from ever copying this object and double-deleting the buffer
-    UniformBuffer(const UniformBuffer&) = delete;
-    UniformBuffer& operator=(const UniformBuffer&) = delete;
+    UniformBuffer(const UniformBuffer &) = delete;
+    UniformBuffer &operator=(const UniformBuffer &) = delete;
 
     // Size must be in bytes
     UniformBuffer(const size_t size, const void *data, const unsigned int drawType);
+
+    UniformBuffer(UniformBuffer &&other) noexcept;
+    UniformBuffer &operator=(UniformBuffer &&other) noexcept;
+
     ~UniformBuffer();
 
     void bind() const;
