@@ -187,7 +187,7 @@ void Model::Draw(Shader &shader, const glm::mat4 &modelMatrix)
 {
     for (unsigned int i = 0; i < this->nodes.size(); i++)
     {
-        glm::mat4 meshMatrix = modelMatrix;// * this->nodes[i].localTransform;
+        glm::mat4 meshMatrix = modelMatrix * this->nodes[i].localTransform;
 
         // ModelMatrix is at layout(location = 0) always
         shader.setMatrix4(0, meshMatrix);
