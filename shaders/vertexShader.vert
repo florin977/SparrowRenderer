@@ -11,9 +11,13 @@ layout(binding = 0, std140) uniform cameraData {
     mat4 projectionMatrix;
 };
 
+out vec4 outNormal;
 out vec2 uvCoord;
 
 void main() {
+    outNormal = vec4(aNormal, 0.0);
+    outNormal = projectionMatrix * viewMatrix * modelMatrix * outNormal;
+
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(aPos, 1.0);
     uvCoord = aUvCoord;
 }
