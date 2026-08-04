@@ -71,5 +71,5 @@ void Entity::Draw(Shader &shader)
 {
     // ModelMatrix is at layout(location = 0) always
     // shader.setMatrix4(0, this->getModelMatrix());
-    this->model->Draw(shader, this->modelMatrix);
+    this->model->Draw(shader, this->getModelMatrix());
 }

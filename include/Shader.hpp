@@ -23,7 +23,8 @@ public:
     void setFloat(const std::string &uniformName, float value);
     void setUnsignedInt(const std::string &uniformName, unsigned int value);
     void setMatrix4(const unsigned int layoutLocation, const glm::mat4 matrix);
-
+    void setVector3(const unsigned int layoutLocation, const glm::vec3 vector);
+    
     void link();
 
     void use() const;

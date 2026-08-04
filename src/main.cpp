@@ -19,6 +19,7 @@
 #include "Model.hpp"
 #include "Entity.hpp"
 #include "Camera.hpp"
+#include "DirectionalLight.hpp"
 
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
@@ -115,13 +116,27 @@ int main(void)
 
         glfwSetCursorPosCallback(mainWindow.getGLFWwindow(), mouse_callback);
 
+        DirectionalLight sun;
+        sun.direction = glm::vec4(1.0, 0.0, 0.0, 0.0);
+        sun.color = glm::vec4(1.0);
+        UniformBuffer lightUBO(sizeof(DirectionalLight), &sun, GL_STATIC_DRAW);
+        lightUBO.setBindingPoint(3);
+
         Camera mainCamera;
         mainCamera.setFarPlane(2000.0);
         camera = &mainCamera;
 
         Shader shader("../shaders/vertexShader.vert", "../shaders/fragmentShader.frag");
-        Model model("../Assets/LearnOpenGL/scene.gltf");
+        Shader lightShader("../shaders/vertexShader.vert", "../shaders/lightFragmentShader.frag");
+        lightShader.use();
+        lightShader.setVector3(1, glm::vec3(1.0, 1.0, 1.0));
+
+        // Model model("../Assets/LearnOpenGL/scene.gltf");
+        Model model("../Assets/Duck/Duck.gltf");
+        Model lightModel("../Assets/Box/BoxTextured.gltf");
         Entity cube(&model);
+        Entity light(&lightModel);
+        light.translate(glm::vec3(3.0, 2.0, -3.0));
 
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
@@ -138,6 +153,9 @@ int main(void)
 
             shader.use();
             cube.Draw(shader);
+
+            lightShader.use();
+            light.Draw(lightShader);
 
             /* Poll for and process events */
             mainWindow.pollEvents();

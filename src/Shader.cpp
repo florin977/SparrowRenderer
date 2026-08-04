@@ -102,6 +102,10 @@ void Shader::setMatrix4(const unsigned int layoutLocation, const glm::mat4 matri
 {
     glUniformMatrix4fv(layoutLocation, 1, GL_FALSE, glm::value_ptr(matrix));
 }
+void Shader::setVector3(const unsigned int layoutLocation, const glm::vec3 vector)
+{
+    glUniform3f(layoutLocation, vector.x, vector.y, vector.z);
+}
 
 void Shader::link()
 {
