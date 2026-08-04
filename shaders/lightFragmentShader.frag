@@ -1,9 +1,12 @@
 #version 460
 
-layout(location = 2) uniform vec3 lightColor;
+layout(binding = 3) uniform DirectionalLight {
+    vec4 position;
+    vec4 color;
+} light;
 
-out vec4 FragColor;
+out vec4 fragColor;
 
 void main() {
-    FragColor = vec4(lightColor, 1.0);
+    fragColor = light.color;
 }

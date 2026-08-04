@@ -8,7 +8,7 @@ layout(binding = 1) uniform sampler2D specularTexture;
 layout(binding = 2) uniform sampler2D normalTexture;
 
 layout(binding = 3) uniform DirectionalLight {
-    vec4 direction;
+    vec4 position;
     vec4 color;
 } light;
 
@@ -18,13 +18,15 @@ void main() {
     vec4 objectColor = texture(diffuseTexture, uvCoord);
     
     float ambientStrength = 0.1;
-    vec4 ambient = vec4(ambientStrength * light.color.rgb, 1.0);
+    vec3 ambient = ambientStrength * light.color.rgb;
 
-    vec4 direction = normalize(-light.direction);
-    vec4 normal = normalize(outNormal);
+    // light.position - world center ((0, 0, 0) in this case)
+    vec3 direction = normalize(light.position.xyz);
+    
+    vec3 normal = normalize(outNormal.xyz);
     float diff = max(dot(direction, normal), 0.0);
+    vec3 diffuse = diff * light.color.rgb;
 
-    vec4 finalColor = (ambient + diff) * objectColor;
+    fragColor = vec4((ambient + diffuse) * objectColor.rgb, objectColor.a);
 
-    fragColor = vec4(finalColor.rgb, 1.0);
 }

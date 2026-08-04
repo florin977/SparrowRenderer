@@ -21,6 +21,7 @@ set(SOURCES
     src/Model.cpp
     src/Entity.cpp
     src/Camera.cpp
+    src/DirectionalLight.cpp
 )
 
 include(FetchContent)

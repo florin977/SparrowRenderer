@@ -122,22 +122,14 @@ int main(void)
 
         Shader shader("../shaders/vertexShader.vert", "../shaders/fragmentShader.frag");
         Shader lightShader("../shaders/vertexShader.vert", "../shaders/lightFragmentShader.frag");
-        lightShader.use();
-        lightShader.setVector3(2, glm::vec3(1.0, 1.0, 1.0));
 
-        // Model model("../Assets/LearnOpenGL/scene.gltf");
-        Model model("../Assets/Duck/Duck.gltf");
+        Model model("../Assets/LearnOpenGL/scene.gltf");
+        // Model model("../Assets/Duck/Duck.gltf");
         Model lightModel("../Assets/Box/BoxTextured.gltf");
         Entity cube(&model);
-        Entity light(&lightModel);
-
-        DirectionalLight sun;
-        sun.direction = glm::vec4(1.0, -2.0, -3.0, 0.0);
-        sun.color = glm::vec4(1.0);
-        UniformBuffer lightUBO(sizeof(DirectionalLight), &sun, GL_STATIC_DRAW);
-        lightUBO.setBindingPoint(3);
-
-        light.translate(glm::vec3(-1.0, 2.0, 3.0));
+        Entity lightEntity(&lightModel);
+        lightEntity.setScale(glm::vec3(100.0, 100.0, 100.0));
+        DirectionalLight light(glm::vec4(1.0, 2.0, 250.0, 1.0), glm::vec4(1.0), &lightEntity);
 
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
