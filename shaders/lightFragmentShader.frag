@@ -1,6 +1,6 @@
 #version 460
 
-layout(location = 1) uniform vec3 lightColor;
+layout(location = 2) uniform vec3 lightColor;
 
 out vec4 FragColor;
 

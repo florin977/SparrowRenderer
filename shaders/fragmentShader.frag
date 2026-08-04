@@ -15,10 +15,16 @@ layout(binding = 3) uniform DirectionalLight {
 out vec4 fragColor;
 
 void main() {
-    vec4 direction = normalize(-light.direction);
-    vec3 outNormal2 = normalize(outNormal.xyz);
-    float cosine = dot(direction.xyz, outNormal2);
+    vec4 objectColor = texture(diffuseTexture, uvCoord);
+    
+    float ambientStrength = 0.1;
+    vec4 ambient = vec4(ambientStrength * light.color.rgb, 1.0);
 
-    fragColor = texture(diffuseTexture, uvCoord);
-    fragColor = fragColor * cosine;
+    vec4 direction = normalize(-light.direction);
+    vec4 normal = normalize(outNormal);
+    float diff = max(dot(direction, normal), 0.0);
+
+    vec4 finalColor = (ambient + diff) * objectColor;
+
+    fragColor = vec4(finalColor.rgb, 1.0);
 }

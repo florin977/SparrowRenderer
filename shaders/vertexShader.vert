@@ -5,6 +5,7 @@ layout(location = 1) in vec3 aNormal;
 layout(location = 2) in vec2 aUvCoord;
 
 layout(location = 0) uniform mat4 modelMatrix;
+layout(location = 1) uniform mat4 normalMatrix;
 
 layout(binding = 0, std140) uniform cameraData {
     mat4 viewMatrix;
@@ -16,7 +17,7 @@ out vec2 uvCoord;
 
 void main() {
     outNormal = vec4(aNormal, 0.0);
-    outNormal = projectionMatrix * viewMatrix * modelMatrix * outNormal;
+    outNormal = normalMatrix * outNormal;
 
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(aPos, 1.0);
     uvCoord = aUvCoord;

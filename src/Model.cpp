@@ -188,9 +188,11 @@ void Model::Draw(Shader &shader, const glm::mat4 &modelMatrix)
     for (unsigned int i = 0; i < this->nodes.size(); i++)
     {
         glm::mat4 meshMatrix = modelMatrix * this->nodes[i].localTransform;
+        glm::mat4 normalMatrix = glm::transpose(glm::inverse(meshMatrix));
 
         // ModelMatrix is at layout(location = 0) always
         shader.setMatrix4(0, meshMatrix);
+        shader.setMatrix4(1, normalMatrix);
 
         unsigned int meshIndex = this->nodes[i].meshIndex;
         this->meshes[meshIndex].Draw(shader);
