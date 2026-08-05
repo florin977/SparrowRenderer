@@ -20,14 +20,11 @@ public:
     void swapBuffers() const;
     void pollEvents() const;
 
-
     int getWidth();
     int getHeight();
     GLFWwindow *getGLFWwindow() const;
 
     void setWidth(int width);
     void setHeight(int height);
-
-    bool isKeyPressed(int key) const;
     void setShouldClose(int value);
 };

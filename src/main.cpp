@@ -21,55 +21,19 @@
 #include "Camera.hpp"
 #include "DirectionalLight.hpp"
 #include "UI.hpp"
+#include "HardwareInput.hpp"
 
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
 
-// Start mouse in the center of the screen
-float lastX = WINDOW_WIDTH / 2.0;
-float lastY = WINDOW_HEIGHT / 2.0;
-bool firstMouse = true;
-Camera *camera = nullptr;
-
-void mouse_callback(GLFWwindow *window, double xPosIn, double yPosIn)
+void processInput(HardwareInput &input, Camera &camera)
 {
-    float xPos = static_cast<float>(xPosIn);
-    float yPos = static_cast<float>(yPosIn);
+    float mouseSensitivity = 0.5;
+    camera.rotate(input.getMouseOffsetX() * mouseSensitivity , input.getMouseOffsetY() * mouseSensitivity);
 
-    // Prevents a camera jump when the mouse first enters the window
-    if (firstMouse)
-    {
-        lastX = xPos;
-        lastY = yPos;
-        firstMouse = false;
-    }
-
-    float xOffset = xPos - lastX;
-    float yOffset = lastY - yPos; // Reversed: Screen Y goes from top to bottom, but 3D Y goes from bottom to top
-
-    lastX = xPos;
-    lastY = yPos;
-
-    float sensitivity = 0.1f;
-    xOffset *= sensitivity;
-    yOffset *= sensitivity;
-
-    if (camera != nullptr)
-    {
-        camera->rotate(xOffset, yOffset);
-    }
-}
-
-void processInput(Window &window, Camera &camera)
-{
     float speed = 0.5;
 
-    if (window.isKeyPressed(GLFW_KEY_ESCAPE))
-    {
-        window.setShouldClose(true);
-    }
-
-    if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT))
+    if (input.keyPressed(GLFW_KEY_LEFT_SHIFT))
     {
         speed = 3.0;
     }
@@ -78,29 +42,29 @@ void processInput(Window &window, Camera &camera)
         speed = 0.5;
     }
 
-    if (window.isKeyPressed(GLFW_KEY_W))
+    if (input.keyPressed(GLFW_KEY_W))
     {
         camera.moveForward(speed);
     }
-    if (window.isKeyPressed(GLFW_KEY_S))
+    if (input.keyPressed(GLFW_KEY_S))
     {
         camera.moveForward(-speed);
     }
 
-    if (window.isKeyPressed(GLFW_KEY_A))
+    if (input.keyPressed(GLFW_KEY_A))
     {
         camera.moveRight(-speed);
     }
-    if (window.isKeyPressed(GLFW_KEY_D))
+    if (input.keyPressed(GLFW_KEY_D))
     {
         camera.moveRight(speed);
     }
 
-    if (window.isKeyPressed(GLFW_KEY_SPACE))
+    if (input.keyPressed(GLFW_KEY_SPACE))
     {
         camera.moveUp(speed);
     }
-    if (window.isKeyPressed(GLFW_KEY_LEFT_CONTROL))
+    if (input.keyPressed(GLFW_KEY_LEFT_CONTROL))
     {
         camera.moveUp(-speed);
     }
@@ -114,15 +78,12 @@ int main(void)
     {
         Camera mainCamera;
         mainCamera.setFarPlane(2000.0);
-        
+        HardwareInput input(&mainWindow);
+
         UI ui(&mainWindow, &mainCamera);
         {
             // Hide cursor and lock it to the screen
             glfwSetInputMode(mainWindow.getGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_CAPTURED);
-
-            glfwSetCursorPosCallback(mainWindow.getGLFWwindow(), mouse_callback);
-
-            camera = &mainCamera;
 
             Shader shader("../shaders/vertexShader.vert", "../shaders/fragmentShader.frag");
             Shader lightShader("../shaders/vertexShader.vert", "../shaders/lightFragmentShader.frag");
@@ -141,9 +102,13 @@ int main(void)
             /* Loop until the user closes the window */
             while (!mainWindow.shouldClose())
             {
-                ui.beginFrame();
+                /* Poll for and process events */
+                mainWindow.pollEvents();
 
-                processInput(mainWindow, mainCamera);
+                input.poll();
+                processInput(input, mainCamera);
+
+                ui.beginFrame();
 
                 glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -157,9 +122,6 @@ int main(void)
                 light.Draw(lightShader);
 
                 ui.Draw();
-
-                /* Poll for and process events */
-                mainWindow.pollEvents();
 
                 /* Swap front and back buffers */
                 mainWindow.swapBuffers();

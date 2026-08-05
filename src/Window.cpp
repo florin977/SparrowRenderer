@@ -104,11 +104,6 @@ void Window::setHeight(int height)
     this->height = height;
 }
 
-bool Window::isKeyPressed(int key) const
-{
-    return (glfwGetKey(window, key) == GLFW_PRESS);
-}
-
 void Window::setShouldClose(int value)
 {
     glfwSetWindowShouldClose(window, value);

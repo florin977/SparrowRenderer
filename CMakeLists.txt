@@ -24,6 +24,7 @@ set(SOURCES
     src/DirectionalLight.cpp
     src/UI.cpp
     src/Controllers/CameraController.cpp
+    src/HardwareInput.cpp
 )
 
 set(IMGUI_DIR "src/vendor/imgui")
