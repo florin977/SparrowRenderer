@@ -22,6 +22,19 @@ set(SOURCES
     src/Entity.cpp
     src/Camera.cpp
     src/DirectionalLight.cpp
+    src/UI.cpp
+    src/Controllers/CameraController.cpp
+)
+
+set(IMGUI_DIR "src/vendor/imgui")
+
+set(IMGUI_SOURCES
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
 )
 
 include(FetchContent)
@@ -42,9 +55,9 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(assimp)
 
-add_executable(prg ${SOURCES})
+add_executable(prg ${SOURCES} ${IMGUI_SOURCES})
 
-target_include_directories(prg PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(prg PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${IMGUI_DIR} ${IMGUI_DIR}/backends)
 
 set(OpenGL_GL_PREFERENCE GLVND)
 

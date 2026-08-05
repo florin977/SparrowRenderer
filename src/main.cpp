@@ -20,6 +20,7 @@
 #include "Entity.hpp"
 #include "Camera.hpp"
 #include "DirectionalLight.hpp"
+#include "UI.hpp"
 
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
@@ -111,52 +112,59 @@ int main(void)
 {
     Window mainWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Sparrow Renderer");
     {
-        // Hide cursor and lock it to the screen
-        glfwSetInputMode(mainWindow.getGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-        glfwSetCursorPosCallback(mainWindow.getGLFWwindow(), mouse_callback);
-
         Camera mainCamera;
         mainCamera.setFarPlane(2000.0);
-        camera = &mainCamera;
-
-        Shader shader("../shaders/vertexShader.vert", "../shaders/fragmentShader.frag");
-        Shader lightShader("../shaders/vertexShader.vert", "../shaders/lightFragmentShader.frag");
-
-        Model model("../Assets/LearnOpenGL/scene.gltf");
-        // Model model("../Assets/Duck/Duck.gltf");
-        Model lightModel("../Assets/Box/BoxTextured.gltf");
-        Entity cube(&model);
-        Entity lightEntity(&lightModel);
-        lightEntity.setScale(glm::vec3(100.0, 100.0, 100.0));
-        DirectionalLight light(glm::vec4(1.0, 2.0, 250.0, 1.0), glm::vec4(1.0), &lightEntity);
-
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_CULL_FACE);
-
-        /* Loop until the user closes the window */
-        while (!mainWindow.shouldClose())
+        
+        UI ui(&mainWindow, &mainCamera);
         {
-            processInput(mainWindow, mainCamera);
+            // Hide cursor and lock it to the screen
+            glfwSetInputMode(mainWindow.getGLFWwindow(), GLFW_CURSOR, GLFW_CURSOR_CAPTURED);
 
-            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glfwSetCursorPosCallback(mainWindow.getGLFWwindow(), mouse_callback);
 
-            mainCamera.Update();
+            camera = &mainCamera;
 
-            shader.use();
-            cube.Draw(shader);
+            Shader shader("../shaders/vertexShader.vert", "../shaders/fragmentShader.frag");
+            Shader lightShader("../shaders/vertexShader.vert", "../shaders/lightFragmentShader.frag");
 
-            lightShader.use();
-            light.Draw(lightShader);
+            Model model("../Assets/LearnOpenGL/scene.gltf");
+            // Model model("../Assets/Duck/Duck.gltf");
+            Model lightModel("../Assets/Box/BoxTextured.gltf");
+            Entity cube(&model);
+            Entity lightEntity(&lightModel);
+            lightEntity.setScale(glm::vec3(100.0, 100.0, 100.0));
+            DirectionalLight light(glm::vec4(1.0, 2.0, 250.0, 1.0), glm::vec4(1.0), &lightEntity);
 
-            /* Poll for and process events */
-            mainWindow.pollEvents();
+            glEnable(GL_DEPTH_TEST);
+            glEnable(GL_CULL_FACE);
 
-            /* Swap front and back buffers */
-            mainWindow.swapBuffers();
+            /* Loop until the user closes the window */
+            while (!mainWindow.shouldClose())
+            {
+                ui.beginFrame();
+
+                processInput(mainWindow, mainCamera);
+
+                glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                mainCamera.Update();
+
+                shader.use();
+                cube.Draw(shader);
+
+                lightShader.use();
+                light.Draw(lightShader);
+
+                ui.Draw();
+
+                /* Poll for and process events */
+                mainWindow.pollEvents();
+
+                /* Swap front and back buffers */
+                mainWindow.swapBuffers();
+            }
         }
     }
-
     return 0;
 }

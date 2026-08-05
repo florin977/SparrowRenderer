@@ -18,12 +18,9 @@ static void framebuffer_resize_callback(GLFWwindow *glfwWindow, int width, int h
 }
 
 Window::Window(int width, int height, const std::string &windowName)
+    : width(width), height(height)
 {
-
     glfwSetErrorCallback(error_callback);
-
-    this->width = width;
-    this->height = height;
 
     /* Initialize the library */
     if (!glfwInit())
@@ -62,20 +59,24 @@ Window::Window(int width, int height, const std::string &windowName)
     }
 }
 
-Window::~Window() {
+Window::~Window()
+{
     glfwDestroyWindow(window);
     glfwTerminate();
 }
 
-bool Window::shouldClose() const {
+bool Window::shouldClose() const
+{
     return glfwWindowShouldClose(window);
 }
 
-void Window::swapBuffers() const {
+void Window::swapBuffers() const
+{
     glfwSwapBuffers(window);
 }
 
-void Window::pollEvents() const {
+void Window::pollEvents() const
+{
     glfwPollEvents();
 }
 
@@ -91,7 +92,7 @@ int Window::getHeight()
 
 GLFWwindow *Window::getGLFWwindow() const
 {
-    return window;
+    return this->window;
 }
 
 void Window::setWidth(int width)
@@ -103,10 +104,12 @@ void Window::setHeight(int height)
     this->height = height;
 }
 
-bool Window::isKeyPressed(int key) const {
+bool Window::isKeyPressed(int key) const
+{
     return (glfwGetKey(window, key) == GLFW_PRESS);
 }
 
-void Window::setShouldClose(int value) {
+void Window::setShouldClose(int value)
+{
     glfwSetWindowShouldClose(window, value);
 }

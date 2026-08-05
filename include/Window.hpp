@@ -8,11 +8,11 @@ class Window
 {
 private:
     GLFWwindow *window;
-    int width = 1280;
-    int height = 960;
+    int width;
+    int height;
 
 public:
-    Window(int width, int height, const std::string& windowName);
+    Window(int width = 1280, int height = 960, const std::string& windowName = "Sparrow Renderer");
 
     ~Window();
 
