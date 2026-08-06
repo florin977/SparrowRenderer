@@ -22,53 +22,10 @@
 #include "DirectionalLight.hpp"
 #include "UI.hpp"
 #include "HardwareInput.hpp"
+#include "Controllers/CameraController.hpp"
 
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
-
-void processInput(HardwareInput &input, Camera &camera)
-{
-    float mouseSensitivity = 0.5;
-    camera.rotate(input.getMouseOffsetX() * mouseSensitivity , input.getMouseOffsetY() * mouseSensitivity);
-
-    float speed = 0.5;
-
-    if (input.keyPressed(GLFW_KEY_LEFT_SHIFT))
-    {
-        speed = 3.0;
-    }
-    else
-    {
-        speed = 0.5;
-    }
-
-    if (input.keyPressed(GLFW_KEY_W))
-    {
-        camera.moveForward(speed);
-    }
-    if (input.keyPressed(GLFW_KEY_S))
-    {
-        camera.moveForward(-speed);
-    }
-
-    if (input.keyPressed(GLFW_KEY_A))
-    {
-        camera.moveRight(-speed);
-    }
-    if (input.keyPressed(GLFW_KEY_D))
-    {
-        camera.moveRight(speed);
-    }
-
-    if (input.keyPressed(GLFW_KEY_SPACE))
-    {
-        camera.moveUp(speed);
-    }
-    if (input.keyPressed(GLFW_KEY_LEFT_CONTROL))
-    {
-        camera.moveUp(-speed);
-    }
-}
 
 // Call shader.use() BEFORE drawing
 
@@ -77,8 +34,8 @@ int main(void)
     Window mainWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Sparrow Renderer");
     {
         Camera mainCamera;
-        mainCamera.setFarPlane(2000.0);
         HardwareInput input(&mainWindow);
+        CameraController camController(&mainCamera, &input, 0.5, 0.3);
 
         UI ui(&mainWindow, &mainCamera);
         {
@@ -106,14 +63,13 @@ int main(void)
                 mainWindow.pollEvents();
 
                 input.poll();
-                processInput(input, mainCamera);
-
+                camController.Update();
+                mainCamera.Update();
+                
                 ui.beginFrame();
 
                 glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-                mainCamera.Update();
 
                 shader.use();
                 cube.Draw(shader);

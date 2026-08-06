@@ -33,7 +33,7 @@ private:
 
 public:
     Camera(glm::vec3 position = glm::vec3(0.0, 0.0, 1.0), glm::vec3 front = glm::vec3(0.0, 0.0, -1.0), glm::vec3 up = glm::vec3(0.0, 1.0, 0.0),
-           float fov = 45.0, float aspectRatio = 16.0 / 9.0, float nearPlane = 0.1, float farPlane = 200.0);
+           float fov = 45.0, float aspectRatio = 16.0 / 9.0, float nearPlane = 0.1, float farPlane = 2000.0);
 
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectionMatrix();

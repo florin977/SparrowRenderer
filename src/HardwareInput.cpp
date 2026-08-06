@@ -12,9 +12,10 @@ void HardwareInput::updateMouse()
     // Prevent a camera snap
     if (this->firstMouseMovement)
     {
-        this->mouse_currentX = static_cast<float>(posX);
-        this->mouse_currentY = static_cast<float>(posY);
+        this->mouse_currentX = this->mouse_lastX = static_cast<float>(posX);
+        this->mouse_currentY = this->mouse_lastY = static_cast<float>(posY);
         this->firstMouseMovement = false;
+        return;
     }
 
     this->mouse_lastX = this->mouse_currentX;
