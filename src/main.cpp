@@ -23,6 +23,7 @@
 #include "UI.hpp"
 #include "HardwareInput.hpp"
 #include "Controllers/CameraController.hpp"
+#include "SceneSave.hpp"
 
 #define WINDOW_HEIGHT 720
 #define WINDOW_WIDTH 1280
@@ -65,7 +66,7 @@ int main(void)
                 input.poll();
                 camController.Update();
                 mainCamera.Update();
-                
+
                 ui.beginFrame();
 
                 glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

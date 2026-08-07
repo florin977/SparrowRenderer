@@ -25,6 +25,7 @@ set(SOURCES
     src/UI.cpp
     src/Controllers/CameraController.cpp
     src/HardwareInput.cpp
+    src/SceneSave.cpp
 )
 
 set(IMGUI_DIR "src/vendor/imgui")
