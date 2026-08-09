@@ -2,5 +2,5 @@
 
 struct Entity
 {
-    unsigned int id;
+    int id;
 };

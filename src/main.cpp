@@ -56,6 +56,8 @@ int main(void)
 
             glEnable(GL_DEPTH_TEST);
             glEnable(GL_CULL_FACE);
+            // Disable V-Sync
+            glfwSwapInterval(0);
 
             /* Loop until the user closes the window */
             while (!mainWindow.shouldClose())

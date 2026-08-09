@@ -55,7 +55,15 @@ FetchContent_Declare(
     GIT_TAG v6.0.5
 )
 
+FetchContent_Declare(
+    EnTT
+    GIT_REPOSITORY https://github.com/skypjack/entt.git
+    GIT_TAG        v4.0.0
+)
+
+
 FetchContent_MakeAvailable(assimp)
+FetchContent_MakeAvailable(EnTT)
 
 add_executable(prg ${SOURCES} ${IMGUI_SOURCES})
 
@@ -66,4 +74,4 @@ set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 
-target_link_libraries(prg PRIVATE OpenGL::GL glfw assimp)
+target_link_libraries(prg PRIVATE OpenGL::GL glfw assimp EnTT::EnTT)

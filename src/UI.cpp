@@ -4,6 +4,7 @@ void attachUiElements()
 {
     ImGui::Begin("FPS");
     ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+    ImGui::Text("Frametime: %.2f", 1000.0 / ImGui::GetIO().Framerate);
     ImGui::End();
 }
 
